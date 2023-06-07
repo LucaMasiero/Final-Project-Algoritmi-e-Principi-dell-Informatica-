@@ -1,7 +1,7 @@
 #ifndef VEHICLE_H
 #define VEHICLE_H
 
-    #include "structs.h"
+    #include "struct.h"
 
     void add_vehicle(service_station * station, uint32_t a);
 
