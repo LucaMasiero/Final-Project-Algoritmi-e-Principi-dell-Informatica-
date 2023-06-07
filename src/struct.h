@@ -8,7 +8,9 @@
 #include <limits.h>
 
 typedef struct vehicle_s {
-    // TODO
+    uint16_t quantity;           // number of vehicles with this autonomy
+    uint32_t autonomy;           // autonomy of the vehicle(s)
+    struct vehicle_s * next;     // pointer to next vehicle of the list
 } vehicle;
 
 struct station_data {
