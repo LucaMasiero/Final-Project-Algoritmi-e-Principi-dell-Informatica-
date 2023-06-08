@@ -18,7 +18,7 @@
 
     bool add_station(service_station ** root, uint32_t dist);
 
-    service_station * demolish_station(service_station ** root, service_station * z);
+    bool demolish_station(service_station ** root, service_station * z);
 
     void fixTreeAfterInsert(service_station ** root, service_station * s);
 

@@ -291,8 +291,8 @@ bool add_station(service_station ** root, uint32_t dist){
     return true;
 }
 
-service_station * demolish_station(service_station ** root, service_station * z){
-    if(z == NULL){ return NULL; }
+bool demolish_station(service_station ** root, service_station * z){
+    if(z == NULL){ return false; }
 
     service_station * y = NULL,
             * x = NULL;
@@ -330,7 +330,9 @@ service_station * demolish_station(service_station ** root, service_station * z)
         fixTreeAfterDelete(root, x);
     }
 
-    return y;
+    free(y);
+
+    return true;
 }
 
 void free_tree(service_station * root){
