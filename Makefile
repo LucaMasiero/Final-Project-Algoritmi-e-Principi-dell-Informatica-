@@ -5,7 +5,7 @@ FSAN = -fsanitize=address
 all: build
 
 build: src/main.c
-	 $(CC) $(CFLAGS) $(FSAN) src/main.c src/station.c src/find_path.c src/vehicle.c -o main
+	 $(CC) $(CFLAGS) $(FSAN) src/main.c src/station.c src/find_path.c src/vehicle.c src/test.c -o main
 
 # ------------- Remember to disable address sanitizer when using valgrind -------------
 #### DEBUGGING ####
