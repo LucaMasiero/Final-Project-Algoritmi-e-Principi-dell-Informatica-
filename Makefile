@@ -1,10 +1,15 @@
-build:
-	gcc -Wall -Werror -std=gnu11 -O2 -lm -o main src/main.c src/station.c src/find_path.c -fsanitize=address
+CC = gcc
+CFLAGS = -Wall -Werror -std=gnu11 -O2 -g3 -lm
+FSAN = -fsanitize=address
+
+all: build
+
+build: src/main.c
+	 $(CC) $(CFLAGS) $(FSAN) src/main.c src/station.c src/find_path.c src/vehicle.c -o main
 
 # ------------- Remember to disable address sanitizer when using valgrind -------------
 #### DEBUGGING ####
 valgrind:
-	echo ("memcheck")
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./main
 
 #### OPTIMISATION ####
@@ -22,3 +27,4 @@ time:
 
 clean:
 	rm -f main
+	rm -f *.o

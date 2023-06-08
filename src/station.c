@@ -55,7 +55,7 @@ service_station * tree_minimum(service_station * x){
 
 service_station * predecessor(service_station * x){
     if(x->left != NULL){
-        return tree_minimum(x->left);
+        return tree_maximum(x->left);
     }
 
     service_station * y = x->parent;
@@ -68,7 +68,7 @@ service_station * predecessor(service_station * x){
 
 service_station * successor(service_station * x){
     if(x->right != NULL){
-        return tree_maximum(x->right);
+        return tree_minimum(x->right);
     }
 
     service_station * y = x->parent;
@@ -133,7 +133,7 @@ service_station * new_station(uint32_t d){
     x->station.dist = d;
     x->station.fleet = NULL;
     x->station.max_autonomy = 0;
-    x->station.currShortestPath = INT_MAX;
+    x->station.shortest_path = INT_MAX;
     x->station.prev = NULL;
 
     x->right = NULL;
@@ -260,27 +260,16 @@ void fixTreeAfterDelete(service_station ** root, service_station * s){
 
 bool add_station(service_station ** root, uint32_t dist){
     // Create and initialize new node
-    service_station * new_station = malloc(sizeof(service_station));
-
-    new_station->station.dist = dist;
-    new_station->station.fleet = NULL;
-    new_station->station.max_autonomy = 0;
-    new_station->station.currShortestPath = INT_MAX;
-    new_station->station.prev = NULL;
-
-    new_station->right = NULL;
-    new_station->left = NULL;
-    new_station->parent = NULL;
-    new_station->color = RED;
+    service_station * s = new_station(dist);
 
     // Find the position
     service_station * x = *root;
     service_station * y = NULL;
     while(x != NULL){
         y = x;
-        if(new_station->station.dist > x->station.dist){
+        if(s->station.dist > x->station.dist){
             x = x->right;
-        }else if(new_station->station.dist < x->station.dist){
+        }else if(s->station.dist < x->station.dist){
             x = x->left;
         }else{
             // There is already a service_station at the specified distance
@@ -291,14 +280,14 @@ bool add_station(service_station ** root, uint32_t dist){
     // Insert new node
     if(y == NULL){
         // It's the first node we insert
-        *root = new_station;
-    }else if(new_station->station.dist > y->station.dist){
-        y->right = new_station;
+        *root = s;
+    }else if(s->station.dist > y->station.dist){
+        y->right = s;
     }else{
-        y->left =new_station;
+        y->left =s;
     }
-    new_station->parent = y;
-    fixTreeAfterInsert(root, new_station);
+    s->parent = y;
+    fixTreeAfterInsert(root, s);
     return true;
 }
 
@@ -333,7 +322,7 @@ service_station * demolish_station(service_station ** root, service_station * z)
         z->station.dist = y->station.dist;
         z->station.fleet = y->station.fleet;
         z->station.max_autonomy = y->station.max_autonomy;
-        z->station.currShortestPath = y->station.currShortestPath;
+        z->station.shortest_path = y->station.shortest_path;
         z->station.prev = y->station.prev;
     }
     // if black balance has changed
