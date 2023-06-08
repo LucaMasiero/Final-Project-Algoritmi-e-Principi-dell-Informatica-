@@ -24,4 +24,7 @@
 
     void fixTreeAfterDelete(service_station ** root, service_station *s);
 
+    /***** FREE *****/
+    void free_tree(service_station * root);
+
 #endif //STATION_H

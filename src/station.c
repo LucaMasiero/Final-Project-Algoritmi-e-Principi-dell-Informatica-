@@ -332,3 +332,16 @@ service_station * demolish_station(service_station ** root, service_station * z)
 
     return y;
 }
+
+void free_tree(service_station * root){
+    if(root == NULL){ return; }
+    free_tree(root->left);
+    free_tree(root->right);
+    vehicle * v = root->station.fleet, * tmp;
+    while(v){
+        tmp = v->next;
+        free(v);
+        v = tmp;
+    }
+    free(root);
+}
