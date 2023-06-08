@@ -5,7 +5,7 @@ FSAN = -fsanitize=address
 all: build
 
 build: src/main.c
-	 $(CC) $(CFLAGS) $(FSAN) src/main.c src/station.c src/find_path.c src/vehicle.c src/test.c -o main
+	 $(CC) $(CFLAGS) src/main.c src/station.c src/find_path.c src/vehicle.c src/test.c -o main
 
 # ------------- Remember to disable address sanitizer when using valgrind -------------
 #### DEBUGGING ####
@@ -14,11 +14,11 @@ valgrind:
 
 #### OPTIMISATION ####
 callgrind:
-	valgrind --tool=callgrind --callgrind-out-file=callgrind_out ./main
+	valgrind --tool=callgrind --callgrind-out-file=valgrind/callgrind_out ./main
 	kcachegrind callgrind_out
 
 massif:
-	valgrind --tool=massif --massif-out-file=massif_out ./main
+	valgrind --tool=massif --massif-out-file=valgrind/massif_out ./main
 	massif-visualizer massif_out
 
 time:
@@ -27,4 +27,3 @@ time:
 
 clean:
 	rm -f main
-	rm -f *.o
