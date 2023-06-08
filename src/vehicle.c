@@ -11,7 +11,9 @@ vehicle * new_vehicle(uint32_t a){
 }
 
 // Before calling this function remember to check if the station exists
-void add_vehicle(service_station * station, uint32_t a){
+bool add_vehicle(service_station * station, uint32_t a){
+    if(station == NULL) { return false; }
+
     /* Add new vehicle to the fleet
         1. There are other vehicles with the same autonomy
         2. It's the first vehicle with this autonomy
@@ -39,10 +41,13 @@ void add_vehicle(service_station * station, uint32_t a){
             station->station.max_autonomy = a;
         }
     }
+    return true;
 }
 
 // Before calling this function remember to check if the station exists
 bool demolish_vehicle(service_station * station, uint32_t a){
+    if(station == NULL) { return false; }
+
     // Look for the vehicle
     vehicle * x = station->station.fleet,
             * y = NULL;
