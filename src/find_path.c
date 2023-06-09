@@ -7,19 +7,14 @@ void print_path(station_data * s){
 }
 
 bool find_direct_path(service_station * start, service_station * finish){
-    // Reinitialize path of each station
-    start->station.shortest_path = 0;
-
+    bool found = false;
     service_station * x = successor(start), * t = NULL;
-    while(x != finish){     // otherwise when doing the comparisons we use the previous path values
-        x->station.shortest_path = INT_MAX;
-        x = successor(x);
-    }
 
+    start->station.shortest_path = 0;
     x = start;
-    while(x->station.shortest_path < INT_MAX){
+    while(!found && x->station.shortest_path < INT_MAX){
 
-        t = successor(x);
+        t = x;
         while(t && x->station.max_autonomy >= t->station.dist - x->station.dist){
             if(t->station.shortest_path > x->station.shortest_path + 1){
                 // we found a BETTER PATH for t
@@ -31,49 +26,65 @@ bool find_direct_path(service_station * start, service_station * finish){
                 // PATH DISCOVERED
                 print_path(t->station.prev);
                 printf("%u\n", t->station.dist);    // print last station
-                return true;
+                found = true;
+                break;
             }
 
             t = successor(t);
         }
         x = successor(x);
     }
-    return false;
+
+    // Reinitialize nodes
+    x = start;
+    while(x && x->station.shortest_path != INT_MAX){
+        x->station.shortest_path = INT_MAX;
+        x->station.prev = NULL;
+        x = successor(x);
+    }
+
+    return found;
 }
 
 bool find_inverse_path(service_station * start, service_station * finish){
-    // Reinitialize path of each station
-    start->station.shortest_path = 0;
-
+    bool found = false;
     service_station * x = predecessor(start), * t = NULL;
-    while(x != finish){     // otherwise when doing the comparisons we use the previous path values
-        x->station.shortest_path = INT_MAX;
-        x = predecessor(x);
-    }
 
+    start->station.shortest_path = 0;
     x = start;
     while(x->station.shortest_path < INT_MAX){
 
-        t = predecessor(x);
-
-        while(t && x->station.max_autonomy >= x->station.dist - t->station.dist){
+        t = x;
+        while(x->station.max_autonomy >= x->station.dist - t->station.dist){
             if(t->station.shortest_path >= x->station.shortest_path + 1){
                 // we found a BETTER PATH for t
                 t->station.shortest_path = x->station.shortest_path + 1;
                 t->station.prev = &(x->station);
             }
 
+            if(t == finish) {
+                found = true;
+                break;
+            }
             t = predecessor(t);
         }
+        if(x == finish){ break; }
         x = predecessor(x);
     }
 
-    if(x->station.prev){
+    if(found){
         // PATH DISCOVERED
         print_path(x->station.prev);
         printf("%u\n", x->station.dist);    // print last station
-        return true;
     }
 
-    return false;
+    // Reinitialize nodes
+    x = start;
+    while(x && x->station.shortest_path != INT_MAX){     // otherwise when doing the comparisons we use the previous path values
+        x->station.shortest_path = INT_MAX;
+        x->station.prev = NULL;
+        x = predecessor(x);
+    }
+
+    return found;
 }
