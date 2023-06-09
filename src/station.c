@@ -258,7 +258,7 @@ void fixTreeAfterDelete(service_station ** root, service_station * s){
     if(s) { s->color = BLACK; }
 }
 
-bool add_station(service_station ** root, uint32_t dist){
+service_station * add_station(service_station ** root, uint32_t dist){
     // Create and initialize new node
     service_station * s = new_station(dist);
 
@@ -273,7 +273,7 @@ bool add_station(service_station ** root, uint32_t dist){
             x = x->left;
         }else{
             // There is already a service_station at the specified distance
-            return false;
+            return NULL;
         }
     }
 
@@ -288,7 +288,7 @@ bool add_station(service_station ** root, uint32_t dist){
     }
     s->parent = y;
     fixTreeAfterInsert(root, s);
-    return true;
+    return s;
 }
 
 bool demolish_station(service_station ** root, service_station * z){

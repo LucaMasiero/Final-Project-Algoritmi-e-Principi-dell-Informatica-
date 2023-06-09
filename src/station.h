@@ -16,7 +16,7 @@
 
     service_station * search_station(service_station * root, uint32_t dist);
 
-    bool add_station(service_station ** root, uint32_t dist);
+service_station * add_station(service_station ** root, uint32_t dist);
 
     bool demolish_station(service_station ** root, service_station * z);
 
