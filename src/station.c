@@ -159,46 +159,49 @@ service_station * search_station(service_station * root, uint32_t dist){
 }
 
 void fixTreeAfterInsert(service_station ** root, service_station * s){
-    while(is_red(s->parent)){
-        // If parentNode is red then I'm sure node has a grandparent because the root can't be red
-        service_station * parent = s->parent;
-        service_station * grandParent = grandparent_of(s);
-        service_station * uncle = uncle_of(s);
+    while (s != *root && s->parent->color == 1) {
+        if (is_left_child(s->parent)) {
+            service_station *grandParent = s->parent->parent,
+                            *uncle = grandParent->right;
 
-        if(is_red(uncle)){
-            parent->color = BLACK;
-            uncle->color = BLACK;
-            grandParent->color = RED;
-
-            s = grandParent;
-        }else{
-            // If parent is left
-            if(is_left_child(parent)){
-                // If node is innerChild
-                if(is_right_child(s)){
-                    leftRotate(root, parent);
-
-                    s = parent; // So that at the next loop we exit because parent (the curr "node") will be black
+            if (uncle != NULL && uncle->color == 1) {
+                s->parent->color = 0;
+                uncle->color = 0;
+                grandParent->color = 1;
+                s = grandParent;
+            } else {
+                if (s == s->parent->right) {
+                    s = s->parent;
+                    leftRotate(root, s);
                 }
-                s->parent->color = BLACK; // The node which was previously "node" and is now root of the subtree is colored black
-                grandParent->color = RED;
-                rightRotate(root, grandParent); // The order of rotation and coloring is not important
+
+                s->parent->color = 0;
+                grandParent->color = 1;
+                rightRotate(root, grandParent);
             }
-                // If parent is right
-            else{
-                // If node is innerChild
-                if(is_left_child(s)){
-                    rightRotate(root, parent);
+        } else {
+            service_station *grandParent = grandparent_of(s),
+                            *uncle = grandParent->left;
 
-                    s = parent;
+            if (uncle != NULL && uncle->color == 1) {
+                s->parent->color = 0;
+                uncle->color = 0;
+                grandParent->color = 1;
+                s = grandParent;
+            } else {
+                if (s == s->parent->left) {
+                    s = s->parent;
+                    rightRotate(root, s);
                 }
-                s->parent->color = BLACK;
-                grandParent->color = RED;
+
+                s->parent->color = 0;
+                grandParent->color = 1;
                 leftRotate(root, grandParent);
             }
         }
     }
-    if(!has_parent(s)){ s->color = BLACK;}
+
+    (*root)->color = 0;
 }
 
 void fixTreeAfterDelete(service_station ** root, service_station * s){
