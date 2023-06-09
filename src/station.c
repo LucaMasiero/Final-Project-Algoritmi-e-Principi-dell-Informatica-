@@ -202,6 +202,8 @@ void fixTreeAfterInsert(service_station ** root, service_station * s){
 }
 
 void fixTreeAfterDelete(service_station ** root, service_station * s){
+    if(!s) { return; }
+
     while (s != *root && s->color == BLACK) {
         if (s == s->parent->left) {
             service_station * w = s->parent->right;
@@ -254,8 +256,8 @@ void fixTreeAfterDelete(service_station ** root, service_station * s){
                 s = *root;       // so that we exit the while-loop
             }
         }
+        s->color = BLACK;
     }
-    if(s) { s->color = BLACK; }
 }
 
 service_station * add_station(service_station ** root, uint32_t dist){
