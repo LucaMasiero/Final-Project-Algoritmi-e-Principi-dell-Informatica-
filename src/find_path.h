@@ -9,4 +9,6 @@
 
     bool find_inverse_path(service_station * start, service_station * finish);
 
+    void print_path(station_data * s);
+
 #endif //FIND_PATH_H

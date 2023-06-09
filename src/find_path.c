@@ -1,5 +1,11 @@
 #include "find_path.h"
 
+void print_path(station_data * s){
+    if(s == NULL) { return; }
+    print_path(s->prev);
+    printf("%u ", s->dist);
+}
+
 bool find_direct_path(service_station * start, service_station * finish){
     // Reinitialize path of each station
     start->station.shortest_path = 0;
@@ -11,7 +17,7 @@ bool find_direct_path(service_station * start, service_station * finish){
     }
 
     x = start;
-    while(x != finish){
+    while(x->station.shortest_path < INT_MAX){
 
         t = successor(x);
         while(t && x->station.max_autonomy >= t->station.dist - x->station.dist){
@@ -23,12 +29,8 @@ bool find_direct_path(service_station * start, service_station * finish){
 
             if(t == finish){
                 // PATH DISCOVERED
-                station_data * sd = &(t->station);
-                while(sd != NULL){
-                    printf("%u <-", sd->dist);
-                    sd = sd->prev;
-                }
-                printf(" START\n");
+                print_path(t->station.prev);
+                printf("%u\n", t->station.dist);    // print last station
                 return true;
             }
 
@@ -50,7 +52,7 @@ bool find_inverse_path(service_station * start, service_station * finish){
     }
 
     x = start;
-    while(x != finish){
+    while(x->station.shortest_path < INT_MAX){
 
         t = predecessor(x);
 
@@ -68,12 +70,8 @@ bool find_inverse_path(service_station * start, service_station * finish){
 
     if(x->station.prev){
         // PATH DISCOVERED
-        station_data * sd = &(x->station);
-        while(sd != NULL){
-            printf("%u <-", sd->dist);
-            sd = sd->prev;
-        }
-        printf(" START");
+        print_path(x->station.prev);
+        printf("%u\n", x->station.dist);    // print last station
         return true;
     }
 
