@@ -44,7 +44,6 @@ bool add_vehicle(service_station * station, uint32_t a){
     return true;
 }
 
-// Before calling this function remember to check if the station exists
 bool demolish_vehicle(service_station * station, uint32_t a){
     if(station == NULL) { return false; }
 
@@ -68,15 +67,14 @@ bool demolish_vehicle(service_station * station, uint32_t a){
         if(!y){
             // ... if it's the head
             station->station.fleet = x->next;
+
+            // update max autonomy of the station
+            x->next ? (station->station.max_autonomy = x->next->autonomy)
+                    : (station->station.max_autonomy = 0);
         }else{
             y->next = x->next;
         }
 
-        // update max autonomy of the station
-        if(station->station.max_autonomy == a){
-            x->next ? (station->station.max_autonomy = x->next->autonomy)
-                    : (station->station.max_autonomy = 0);
-        }
         // free node
         free(x);
     }
