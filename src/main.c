@@ -18,7 +18,7 @@ uint8_t strlen_m(char * str){
 int main(){
 
     service_station * root = NULL;
-    char input[4096];
+    char input[5666];
     char *token;
     uint8_t len;
 
