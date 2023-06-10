@@ -8,7 +8,7 @@ void print_path(station_data * s){
 
 bool find_direct_path(service_station * start, service_station * finish){
     bool found = false;
-    service_station * x = successor(start), * t = NULL;
+    service_station * x, * t = NULL;
 
     start->station.shortest_path = 0;
     x = start;
@@ -48,7 +48,7 @@ bool find_direct_path(service_station * start, service_station * finish){
 
 bool find_inverse_path(service_station * start, service_station * finish){
     bool found = false;
-    service_station * x = predecessor(start), * t = NULL;
+    service_station * x, * t = NULL;
 
     start->station.shortest_path = 0;
     x = start;
